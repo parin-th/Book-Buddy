@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">  
+    <link rel="stylesheet" href="styles.css">  
+    <title>Book Buddy</title>
+</head>
+<body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail,createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIAsij1oIiWFkmYZD6zz_pf96FIDYIPlA",
+            authDomain: "book-buddy-e5810.firebaseapp.com",
+            projectId: "book-buddy-e5810",
+            storageBucket: "book-buddy-e5810.firebasestorage.app",
+            messagingSenderId: "430596624247",
+            appId: "1:430596624247:web:4b52c6bed65e9720149b72",
+            measurementId: "G-5PB9MG64E9"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        // Auto-Redirect if Already Logged In
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                localStorage.setItem("userEmail", user.email); // Save email locally
+                window.location.href = "loggedin.html"; // Redirect to home page
+            }
+        });
+
+
+        // Register Function (Save user info to Firestore)
+        console.log("Register button event listener attached!");
+        document.querySelector(".register-container .submit").addEventListener("click", async () => {
+            
+
+            const firstName = document.querySelector(".register-container input[placeholder='Firstname']").value.trim();
+            const lastName = document.querySelector(".register-container input[placeholder='Lastname']").value.trim();
+            const email = document.querySelector(".register-container input[placeholder='Email']").value.trim();
+            const password = document.querySelector(".register-container input[placeholder='Password']").value.trim();
+
+            if (!firstName || !lastName || !email || !password) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                console.log("User created:", user.uid); // Debugging
+
+                // Save user details in Firestore
+                const userRef = doc(db, "users", user.uid);
+                await setDoc(userRef, {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    uid: user.uid
+                });
+
+                console.log("User data saved in Firestore"); // Debugging
+
+                // Send email verification
+                await sendEmailVerification(user);
+                alert("User registered successfully! Please verify your email.");
+                window.location.href = "#login"; // Redirect to login page
+            } catch (error) {
+                console.error("Error:", error); // Debugging
+                alert(error.message);
+            }
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            const googleSignUpButton = document.getElementById("google-register");
+                    // Google Register Function
+            console.log("Google Sign-Up button event listener attached!"); // Debugging
+            googleSignUpButton.addEventListener("click", async () => {
+                console.log("Google Sign-Up button clicked!"); // Debugging
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    const user = result.user;
+
+                    console.log("Google Sign-Up Success:", user);
+
+                    // Save user info to Firestore
+                    const userRef = doc(db, "users", user.uid);
+                    await setDoc(userRef, {
+                        firstName: user.displayName.split(" ")[0] || "",
+                        lastName: user.displayName.split(" ")[1] || "",
+                        email: user.email,
+                        uid: user.uid,
+                        profilePicture: user.photoURL
+                    });
+                    
+                    window.location.href = "loggedin.html"; // Redirect to home page
+                } catch (error) {
+                    console.error("Google Sign-Up Error:", error);
+                    alert(error.message);
+                }
+            });    
+        })
+      </script>
+    <script src="//code.tidio.co/7nb4isdogvqjst4y0wo0mgbnwflfuj6c.js" async></script>
+    <div class="cursor-highlighter" id="cursor"></div>
+    
+    <div class="wrapper">
+    <nav class="nav">
+        <div class="nav-logo">
+            <p >Book Buddy</p>
+        </div>
+        <div class="nav-menu" id="navMenu"></div>
+        <div class="nav-button">
+            <button class="btn" onclick="gback()">Go back</button>
+            <button class="btn" id="loginBtn" onclick="login()">Sign In</button>
+            <button class="btn white-btn" id="registerBtn" onclick="register()">Sign Up</button>
+        </div>
+    </nav>
+    <section class="page" id="page">
+        <div id="particles-js"></div>
+<!----------------------------- Form box ----------------------------------->    
+    <div class="index-box">
+        
+
+        <!------------------- registration form -------------------------->
+        <div class="register-container" id="register">
+            <div class="top">
+                <header>Sign Up</header>
+            </div>
+            <div class="two-forms">
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Firstname">
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Lastname">
+                    <i class="bx bx-user"></i>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email">
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="item-small-container">
+                <input type="submit" class="submit" value="Register" style="margin-bottom: 25px !important">
+                <button id="google-register" class="submit"><img src="google.png" width="30px" height="30px">Sign up with Google</button>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>   
+
+    
+</section>
+
+  
+  
+  <!-- scroll top btn -->
+  <a href="#home" aria-label="ScrollTop" class="fas fa-angle-up" id="scroll-top"></a>
+  <!-- scroll back to top -->
+  <script src='particles.js'></script>
+  <script src='app.js'></script>  
+  <script src="script.js"></script>
+</body>
+</html>
+

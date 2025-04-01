@@ -1,0 +1,487 @@
+/* POPPINS FONT */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
+
+*{  
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background-image: url('3.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+body.inverted {
+    filter: invert(1);
+}   
+/* Particle background or other absolute elements */
+.page #particles-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+.background-overlay {
+    height: auto;
+    min-height: 150vh; /* Ensure it covers the full screen */
+    background: rgba(0, 0, 0, 0.5); /* Adjust opacity */
+}
+h1 {
+    position: relative;
+    z-index: 10;
+    padding-top: 20px; /* Pushes it down */
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+/*Cursor Settings*/ 
+.cursor-highlighter {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 0, 0, 0.4); /* semi-transparent red */
+  border-radius: 50%;
+  transform: translate(-50%, -50%); /* Center the circle on the mouse */
+  transition: transform 0.1s ease-out; /* Smooth transition effect */
+  pointer-events: none; /* Ensure it doesn't interfere with other elements */
+  animation-name: cursor-highlighter;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-delay: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes cursor-highlighter {
+  0%   {background-color:rgba(255, 0, 0, 0.4)}
+  25%  {background-color:rgba(255, 255, 0, 0.4)}
+  50%  {background-color:rgba(0, 0, 255, 0.4)}
+  75%  {background-color:rgba(0, 255, 0, 0.4)}
+  100% {background-color:rgba(255, 0, 0, 0.4)}
+}
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: rgba(39, 39, 39, 0.4);
+}
+.nav{
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
+    background: linear-gradient(rgba(39,39,39, 0.6), transparent);
+    z-index: 100;
+    gap: 10px;
+    
+}
+.nav-logo p{
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+
+.nav-menu ul{
+    display: flex;
+}
+.nav-menu ul li{
+    list-style-type: none;
+}
+.nav-menu ul li .link{
+    text-decoration: none;
+    font-weight: 500;
+    color: #fff;
+    padding-bottom: 15px;
+    margin: 0 25px;
+}
+.link:hover, .active{
+    border-bottom: 2px solid #fff;
+}
+.nav-button .btn{
+    width: 130px;
+    height: 40px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s ease;
+}
+.button-container {
+    position: fixed;
+    bottom: 0;
+    padding: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    min-width: 150px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+.btn:hover{
+    background: rgba(255, 255, 255, 0.3);
+}
+#registerBtn{
+    margin-left: 15px;
+}
+.btn.white-btn{
+    background: rgba(255, 255, 255, 0.7);
+}
+.btn.btn.white-btn:hover{
+    background: rgba(255, 255, 255, 0.5);
+}
+.btn.red-btn{
+    background: rgba(255, 0, 0, 0.3) !important;
+}
+.btn.btn.red-btn:hover{
+    background: rgba(255, 0, 0, 0.5) !important;
+}
+.nav-menu-btn{
+    display: none;
+}
+.form-box{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 512px;
+    height: 500px;
+    z-index: 2;
+}
+.index-box{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 512px;
+    height: 500px;
+    overflow: hidden;
+    z-index: 2;
+}
+.container {
+    overflow: visible; /* Allows elements to show fully */
+    padding-bottom: 80px; /* Adds space for the button */
+}
+
+label {
+    color: white !important;
+}
+
+.page {
+    margin-bottom: 50px; /* Moves everything up a bit */
+}
+
+.login-container{
+    position: absolute;
+    left: 4px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    transition: .5s ease-in-out;
+}
+.register-container{
+    position: absolute;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    transition: .5s ease-in-out;
+}
+.top {
+    position: relative;
+    padding-top: 40px; /* Moves the title down */
+    z-index: 10; /* Ensures it stays above the background */
+}
+
+.top span{
+    color: #fff;
+    font-size: small;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+.top span a{
+    font-weight: 500;
+    color: #fff;
+    margin-left: 5px;
+}
+#dayTitle {
+    position: relative;
+    padding-top: 40px; /* Moves the title down */
+    z-index: 10; /* Ensures it stays above the background */
+    font-size: large;
+    color: #fff;
+}
+header {
+    position: relative;
+    z-index: 10;
+    font-size: 30px;
+    text-align: center;
+    padding: 20px 0;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Adds a shadow for visibility */
+    backdrop-filter: blur(10px); /* Slight background blur */
+}
+
+
+.two-forms{
+    display: flex;
+    gap: 10px;
+}
+.input-field{
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    height: 50px;
+    width: 100%;
+    padding: 0 10px 0 45px;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    transition: .2s ease;
+}
+.input-field:hover, .input-field:focus{
+    background: rgba(255, 255, 255, 0.25);
+}
+::-webkit-input-placeholder{
+    color: #fff;
+}
+.input-box i{
+    position: relative;
+    top: -35px;
+    left: 17px;
+    color: #fff;
+}
+
+select {
+    background-color: rgb(114, 114, 114) !important;
+}
+
+.submit{
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    height: 45px;
+    width: 100%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+.submit:hover{
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+.item{
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    height: 45px;
+    width: 100%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    margin-bottom: 15px;
+}
+.item:hover{
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+.item-small{
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    height: 45px;
+    width: 50%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    margin-bottom: 10px;
+}
+.item-small:hover{
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Flex container to put the small buttons side by side */
+.item-small-container {
+    display: flex;
+    gap: 10px; /* Adds space between the buttons */
+}
+.page {
+    margin-bottom: 50px; /* Moves everything up a bit */
+}
+
+button {
+    position: relative;
+    bottom: 0;
+    z-index: 10;
+    margin-bottom: 25px;
+}
+.main-container {
+    position: relative;
+    min-height: 1000vh; /* Ensures everything fits */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.two-col{
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    font-size: small;
+    margin-top: 10px;
+}
+.two-col .one{
+    display: flex;
+    gap: 5px;
+}
+.two label a{
+    text-decoration: none;
+    color: #fff;
+}
+.two label a:hover{
+    text-decoration: underline;
+}
+@media only screen and (max-width: 786px){
+    .nav-button{
+        display: none;
+    }
+    .nav-menu.responsive{
+        top: 100px;
+    }
+    .nav-menu{
+        position: absolute;
+        top: -800px;
+        display: flex;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        width: 100%;
+        height: 90vh;
+        backdrop-filter: blur(20px);
+        transition: .3s;
+    }
+    .nav-menu ul{
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav-menu-btn{
+        display: block;
+    }
+    .nav-menu-btn i{
+        font-size: 25px;
+        color: #fff;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: .3s;
+    }
+    .nav-menu-btn i:hover{
+        background: rgba(255, 255, 255, 0.15);
+    }
+}
+@media only screen and (max-width: 540px) {
+    .wrapper{
+        min-height: 100vh;
+    }
+    .form-box{
+        width: 100%;
+        height: 500px;
+    }
+    .register-container, .login-container{
+        width: 100%;
+        padding: 0 20px;
+    }
+    .register-container .two-forms{
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+/* Styles for the overlay */
+.overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1;
+}
+/* Styles for the popup */
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 650px;
+    text-align: center;
+}
+/* Close button style */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}

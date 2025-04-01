@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">  
+    <link rel="stylesheet" href="styles.css">  
+    <title>Book Buddy</title>
+    <link rel="icon" href="../images/2.png" type="image/x-icon" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIAsij1oIiWFkmYZD6zz_pf96FIDYIPlA",
+            authDomain: "book-buddy-e5810.firebaseapp.com",
+            projectId: "book-buddy-e5810",
+            storageBucket: "book-buddy-e5810.firebasestorage.app",
+            messagingSenderId: "430596624247",
+            appId: "1:430596624247:web:4b52c6bed65e9720149b72",
+            measurementId: "G-5PB9MG64E9"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        // Auto-Redirect if Already Logged In
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                localStorage.setItem("userEmail", user.email); // Save email locally
+                localStorage.setItem("userId", user.uid); // Save UID locally
+                window.location.href = "loggedin.html"; // Redirect to home page
+            }
+        });
+
+
+        // Google Login Function
+        document.getElementById("google-login").addEventListener("click", () => {
+            var recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert("Please complete the reCAPTCHA verification.");
+                return;
+            }
+
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log("Google sign-in successful:", user);
+                    window.location.href = "loggedin.html"; // Redirect after login
+                })
+                .catch((error) => {
+                    console.error("Error during Google sign-in:", error);
+                    alert(error.message);
+                });
+        });
+
+
+        // Email Login Function
+        document.getElementById("submit").addEventListener("click", () => {
+            var recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                alert("Please complete the reCAPTCHA verification.");
+                return;
+            }
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("pw").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+            alert("Logged in successfully!");
+            })
+            .catch((error) => {
+            alert(error.message);
+            });
+        });
+
+
+
+        // Forgot Password Function
+        document.getElementById("forgot-password").addEventListener("click", () => {
+          const email = document.getElementById("email").value;
+
+          if (!email) {
+            alert("Please enter your email address first.");
+            return;
+          }
+
+          sendPasswordResetEmail(auth, email)
+            .then(() => {
+              alert("Password reset email sent! Check your inbox.");
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
+        });
+
+        document.querySelector(".submit").addEventListener("click", () => {
+        var recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+            alert("Please complete the reCAPTCHA verification.");
+            return;
+        }
+
+        // Prepare the data to be sent in the request body
+        const requestData = {
+            event: {
+                token: grecaptcha.getResponse(), // Retrieve the token from reCAPTCHA
+                expectedAction: 'USER_ACTION',  // Optional: Add user action if needed
+                siteKey: '6LdsfuAqAAAAALOoXOo71fbnUsR20C-JumQY3wuh'
+            }
+        };
+
+        // Convert to JSON format and send the POST request
+        fetch('https://recaptchaenterprise.googleapis.com/v1/projects/mathmaster-1738426109219/assessments?key=API_KEY', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
+      </script>
+    <script src="//code.tidio.co/7nb4isdogvqjst4y0wo0mgbnwflfuj6c.js" async></script>
+    <div class="cursor-highlighter" id="cursor"></div>
+    
+    <div class="wrapper">
+    <nav class="nav">
+        <div class="nav-logo">
+            <p >Book Buddy</p>
+        </div>
+        <div class="nav-menu" id="navMenu"></div>
+        <div class="nav-button">
+            <button class="btn" onclick="gback()">Go back</button>
+            <button class="btn white-btn" id="loginBtn" onclick="login()">Sign In</button>
+            <button class="btn" id="registerBtn" onclick="register()">Sign Up</button>
+        </div>
+    </nav>
+    <section class="page" id="page">
+        <div id="particles-js"></div>
+<!----------------------------- Form box ----------------------------------->    
+    <div class="index-box">
+        
+        <!------------------- login form -------------------------->
+
+        <div class="login-container" id="login">
+            <div class="top">
+                
+                <header>Login</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email" id="email">
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" id="pw">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            
+            <div class="item-small-container">
+                <button type="submit" class="submit" id="submit" >Sign In</button>
+                <button id="google-login" class="submit"><img src="google.png" width="30px" height="30px">Sign in with Google</button>
+            </div>
+            <div class="input-box">
+                <div class="g-recaptcha" data-sitekey="6LdsfuAqAAAAALOoXOo71fbnUsR20C-JumQY3wuh"></div>
+            </div>
+            <div class="two-col">
+                <div class="one">
+                </div>
+                <div class="two">
+                    <label><a href="#" id="forgot-password">Forgot password?</a></label>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>   
+
+    
+</section>
+
+  
+  
+  <!-- scroll top btn -->
+  <a href="#home" aria-label="ScrollTop" class="fas fa-angle-up" id="scroll-top"></a>
+  <!-- scroll back to top -->
+  <script src='particles.js'></script>
+  <script src='app.js'></script>  
+  <script src="script.js"></script>
+</body>
+</html>
+

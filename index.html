@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Book Buddy - Book Reccomender</title>
+</head>
+<body>
+    <!--  Check if user is logged in  -->
+    <script type="module">
+
+        import getAuth from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIAsij1oIiWFkmYZD6zz_pf96FIDYIPlA",
+            authDomain: "book-buddy-e5810.firebaseapp.com",
+            projectId: "book-buddy-e5810",
+            storageBucket: "book-buddy-e5810.firebasestorage.app",
+            messagingSenderId: "430596624247",
+            appId: "1:430596624247:web:4b52c6bed65e9720149b72",
+            measurementId: "G-5PB9MG64E9"
+        };
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                localStorage.setItem("userEmail", user.email); // Save email locally
+                window.location.href = "loggedin.html"; // Redirect to home page
+            }
+        });
+    </script>
+
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Tidio Chat -->
+    <script src="//code.tidio.co/7nb4isdogvqjst4y0wo0mgbnwflfuj6c.js" async></script>
+
+    <div class="cursor-highlighter" id="cursor"></div>
+    <div class="wrapper">
+        <nav class="nav">
+            <div class="nav-logo">
+                <p>Book Buddy - Book Recommender</p>
+            </div>
+            <div class="nav-menu"></div>
+            <div class="nav-button">
+                <button class="btn white-btn" id="loginBtn" onclick="login()">Sign In</button>
+                <button class="btn white-btn" id="registerBtn" onclick="register()">Sign Up</button>
+            </div>
+        </nav>
+        <!-- Overlay and Popup -->
+        <div id="popupOverlay" class="overlay">
+            <div class="popup">
+                <span class="close-btn" id="closePopup">&times;</span>
+                <h2>Top 10 Books</h2>
+                <p>Thank you for visiting our website.</p>
+            </div>
+        </div>
+        <!-- Book Recommendations Form -->
+        <div class="form-box" id="formBox">
+            <div class="login-container">
+                <div class="top"><header>Book Recommendations</header></div>
+                <div class="form-section">
+                    <div class="input-box">
+                        <label for="genre">Genre:</label>
+                        <select id="genre" class="input-field">
+                            <option value="">Select a genre</option>
+                            <option value="nonfiction">Non-Fiction</option>
+                            <option value="fiction">Fiction</option>
+                            <option value="science fiction">Science Fiction</option>
+                            <option value="historical fiction">Historical Fiction</option>
+                            <option value="lgbtq+ fiction">LGBTQ+ Fiction</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="Philosophy">Philosophy</option>
+                            <option value="religion">Religion</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Cooking">Cooking</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Horror">Horror</option>
+                            <option value="Graphic Novels">Graphic Novels</option>
+                            <option value="Self Help">Self-Help</option>
+                            <option value="Biography">Biography</option>
+                            <option value="business">Business</option>
+                            <option value="education">Education</option>
+                            <option value="health&fitness">Health & Fitness</option>
+                            <option value="Technology">Technology</option>
+                            <option value="science">Science</option>
+                            <option value="Mystery">Mystery</option>
+                            <option value="Humor">Humor</option>
+                            <option value="Crime">Crime</option>
+                            <option value="thrillers&suspense">Thrillers & Suspense</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="author">Author:</label>
+                        <input type="text" id="author" class="input-field">
+                    </div>
+                    
+                    <div class="input-box">
+                        <button class="submit" id="show">Show Recommendations</button>
+                        <button class="submit" id="btn">Download Recommendations</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    <script src="script.js"></script>
+    <script>
+        alert("Welcome to Book Buddy! Please sign in to save your reccomendations or continue on this page.");
+        document.getElementById("btn").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const apiKey = "AIzaSyDFDxbgsyKS3jyGcUumDjnHVPtDABzXGUY";
+            const genre = document.getElementById("genre").value;
+            const author = document.getElementById("author").value;
+
+            let query = [];
+            if (author) query.push(`inauthor:%22${encodeURIComponent(author)}%22`);
+            if (genre) query.push(`subject:%22${encodeURIComponent(genre)}%22`);
+
+            if (query.length === 0) {
+                alert("Please fill in at least one field.");
+                return;
+            }
+
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${query.join('+')}&maxResults=10&key=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.items) {
+                        alert("No books found.");
+                        return;
+                    }
+
+                    const doc = new jsPDF();
+                    doc.text("Top 10 Books", 10, 10);
+
+                    doc.autoTable({
+                        head: [["Title", "Author", "Description"]],
+                        body: data.items.map(book => [
+                            book.volumeInfo.title || "N/A",
+                            book.volumeInfo.authors ? book.volumeInfo.authors.join(", ") : "N/A",
+                            book.volumeInfo.description || "N/A"
+                        ]),
+                        startY: 20
+                    });
+
+                    doc.save("books.pdf");
+                })
+                .catch(error => console.error("Error:", error));
+        });
+    </script>
+    <script>
+        // Function to display the popup with book recommendations and hide the form box
+        function showPopup() {
+            const apiKey = "AIzaSyDFDxbgsyKS3jyGcUumDjnHVPtDABzXGUY";
+            const genre = document.getElementById("genre").value;
+            const author = document.getElementById("author").value;
+
+            let query = [];
+            if (author) query.push(`inauthor:%22${encodeURIComponent(author)}%22`);
+            if (genre) query.push(`subject:%22${encodeURIComponent(genre)}%22`);
+
+            if (query.length === 0) {
+                alert("Please fill in at least one field.");
+                return;
+            }
+
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${query.join('+')}&maxResults=10&key=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.items) {
+                        alert("No books found.");
+                        return;
+                    }
+
+                    let recommendationsHTML = "<h2>Top 10 Books</h2><ul>";
+                    data.items.forEach(book => {
+                        const title = book.volumeInfo.title || "Unknown Title";
+                        const authors = book.volumeInfo.authors ? book.volumeInfo.authors.join(", ") : "Unknown Author";
+                        recommendationsHTML += `<li><strong>${title}</strong> by ${authors}</li>`;
+                    });
+                    recommendationsHTML += "</ul>";
+
+                    recommendationsHTML += "<p>Please download the recommendation for a description of the books as well.</p>"; // Added message
+
+                    document.querySelector(".popup").innerHTML = `
+                        <span class="close-btn" id="closePopup">&times;</span>
+                        ${recommendationsHTML}
+                    `;
+
+                    document.getElementById('popupOverlay').style.display = 'block';
+                    document.getElementById('formBox').style.display = 'none'; // Hide form box
+
+                    // Reattach close event
+                    document.getElementById('closePopup').onclick = function() {
+                        closePopup();
+                    };
+                })
+                .catch(error => console.error("Error:", error));
+        }
+
+        // Function to hide the popup and show the form box
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('formBox').style.display = 'block'; // Show form box
+        }
+
+        // Show recommendations on button click
+        document.getElementById('show').onclick = function() {
+            showPopup();
+        };
+
+        // Close the popup if the user clicks outside of it
+        window.onclick = function(event) {
+            var overlay = document.getElementById('popupOverlay');
+            if (event.target === overlay) {
+                closePopup();
+            }
+        };
+
+
+
+    </script>
+    <script src="https://form.jotform.com/static/feedback2.js"></script>
+    <script>
+      var componentID = new JotformFeedback({
+        
+    type: false,
+    width: 700,
+    height: 500,
+    fontColor: "#FFFFFF",
+    background: "#F59202",
+    isCardForm: false,
+    formId: "250248386234155"
+    ,
+        buttonText: "Feedback",
+        buttonSide: "right",
+        buttonAlign: "center",
+        base: "https://form.jotform.com/",
+      }).componentID;
+    </script>
+    <script src='https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js'></script>
+    <script>window.jotformEmbedHandler("iframe[id='" + componentID + "_iframe']", "https://form.jotform.com/")</script>
+</body>
+</html>

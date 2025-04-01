@@ -1,0 +1,72 @@
+body {
+    background: #696969 !important;
+}
+
+
+.calc{
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    height: 45px;
+    width: 37.5%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    margin-bottom: 15px;
+}
+.calc:hover{
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+.calc-small{
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    height: 45px;
+    width: 25%;
+    border: none;
+    border-radius: 50px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    margin-bottom: 10px;
+}
+.calc-small:hover{
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Flex container to put the small buttons side by side */
+.calc-small-container {
+    display: flex;
+    gap: 10px; /* Adds space between the buttons */
+}
+
+.op {
+    background: rgba(10, 159, 255, 0.7);
+}
+
+.func {
+    background: rgba(166, 166, 166, 0.7);
+}
+
+.op:hover{
+    background: rgba(10, 159, 255, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+.func:hover{
+    background: rgba(166, 166, 166, 0.5);
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+
+.calc-field {
+    font-size: 120%;
+    text-align: right;
+    font-family: 'Times New Roman', Times, serif
+}
